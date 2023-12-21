@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 
 import player
+import enemy
 
 SCREEN_WIDTH = 725
 SCREEN_HEIGHT = 551
@@ -19,6 +20,7 @@ class Game():
     bg = pygame.image.load('images/bg.jpg')
 
     self.Player = player.Player()
+    self.Enemy = enemy.Enemy()
 
     while running:
       self.updata()
@@ -36,6 +38,7 @@ class Game():
 
   def draw(self,screen,bg):
     screen.blit(bg, (0, 0))
+    self.Enemy.draw(screen)
     self.Player.draw(screen)
 
 if __name__ == "__main__":
