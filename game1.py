@@ -1,34 +1,42 @@
 import pygame
 from pygame.locals import *
-import os
+
+import player
 
 SCREEN_WIDTH = 725
 SCREEN_HEIGHT = 551
 
 running = True
 
-class run():
+
+class Game():
   def __init__(self):
     pygame.init()
     pygame.display.set_caption("Test")
     screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    self.bg = pygame.image.load('images/bg.jpg')
+    bg = pygame.image.load('images/bg.jpg')
+
+    self.Player = player.Player()
 
     while running:
-      self.draw(screen)
-      clock.tick(100)
+      self.updata()
+      self.draw(screen,bg)
+      clock.tick(70)
       pygame.display.update()
 
       for event in pygame.event.get():
         if event.type == QUIT:
           pygame.quit()
 
-  def draw(self,screen):
-    screen.blit(self.bg, (0, 0))
 
+  def updata(self):
+    self.Player.updata()
 
+  def draw(self,screen,bg):
+    screen.blit(bg, (0, 0))
+    self.Player.draw(screen)
 
 if __name__ == "__main__":
-  run()
+  Game()
