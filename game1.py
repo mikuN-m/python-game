@@ -7,39 +7,54 @@ import enemy
 SCREEN_WIDTH = 725
 SCREEN_HEIGHT = 551
 
-running = True
 
 
-class Game():
+class Game(pygame.sprite.Sprite):
   def __init__(self):
     pygame.init()
     pygame.display.set_caption("Test")
-    screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
+    self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+    self.clock = pygame.time.Clock()
 
-    bg = pygame.image.load('images/bg.jpg')
+    self.bg = pygame.image.load('images/bg.jpg')
 
     self.Player = player.Player()
     self.Enemy = enemy.Enemy()
 
-    while running:
-      self.updata()
-      self.draw(screen,bg)
-      clock.tick(70)
-      pygame.display.update()
+    self.enemies = pygame.sprite.Group()
 
-      for event in pygame.event.get():
-        if event.type == QUIT:
-          pygame.quit()
+    self.enemies.add(self.Enemy)
 
+    self.running = True
 
-  def updata(self):
-    self.Player.updata()
+  def run(self):
+    while self.running:
+      self.update()
+      self.draw(self.screen,self.bg)
+      self.clock.tick(70)
+
+    pygame.quit()
+
+  def update(self):
+    self.Player.update()
+    self.collision()
+
+    for event in pygame.event.get():
+      if event.type == QUIT:
+        self.running = False
+
+  def collision(self):
+    test = pygame.sprite.spritecollide(self.Player,self.enemies,False)
+
+    if test:
+      self.running = False
 
   def draw(self,screen,bg):
     screen.blit(bg, (0, 0))
     self.Enemy.draw(screen)
     self.Player.draw(screen)
+    pygame.display.update()
 
 if __name__ == "__main__":
-  Game()
+  game = Game()
+  game.run()
