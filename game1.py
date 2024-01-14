@@ -3,10 +3,12 @@ from pygame.locals import *
 
 import player
 import enemy
+import player_shot
 
 SCREEN_WIDTH = 725
 SCREEN_HEIGHT = 551
 
+player_pos = 0
 
 
 class Game(pygame.sprite.Sprite):
@@ -18,14 +20,19 @@ class Game(pygame.sprite.Sprite):
 
     self.bg = pygame.image.load('images/bg.jpg')
 
-    self.Player = player.Player()
-    self.Enemy = enemy.Enemy()
+    self.Player = player.Player(SCREEN_WIDTH,SCREEN_HEIGHT)
+    self.Enemy = enemy.Enemy(SCREEN_WIDTH,SCREEN_HEIGHT)
 
     self.enemies = pygame.sprite.Group()
 
     self.enemies.add(self.Enemy)
 
     self.running = True
+
+    self.all = pygame.sprite.RenderUpdates()
+    self.shot = pygame.sprite.Group()
+
+    player_shot.Player_shot.containers = self.all, self.shot
 
   def run(self):
     while self.running:
@@ -37,6 +44,8 @@ class Game(pygame.sprite.Sprite):
 
   def update(self):
     self.Player.update()
+    self.all.update()
+
     self.collision()
 
     for event in pygame.event.get():
@@ -53,6 +62,8 @@ class Game(pygame.sprite.Sprite):
     screen.blit(bg, (0, 0))
     self.Enemy.draw(screen)
     self.Player.draw(screen)
+    self.all.draw(screen)
+
     pygame.display.update()
 
 if __name__ == "__main__":
