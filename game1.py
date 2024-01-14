@@ -17,22 +17,21 @@ class Game(pygame.sprite.Sprite):
     pygame.display.set_caption("Test")
     self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
     self.clock = pygame.time.Clock()
-
     self.bg = pygame.image.load('images/bg.jpg')
-
-    self.Player = player.Player(SCREEN_WIDTH,SCREEN_HEIGHT)
-    self.Enemy = enemy.Enemy(SCREEN_WIDTH,SCREEN_HEIGHT)
-
-    self.enemies = pygame.sprite.Group()
-
-    self.enemies.add(self.Enemy)
-
+    
     self.running = True
 
     self.all = pygame.sprite.RenderUpdates()
     self.shot = pygame.sprite.Group()
+    self.player = pygame.sprite.Group()
+    self.enemies = pygame.sprite.Group()
 
+    player.Player.containers = self.all, self.player
+    enemy.Enemy.containers = self.all, self.enemies
     player_shot.Player_shot.containers = self.all, self.shot
+
+    self.Player = player.Player(SCREEN_WIDTH,SCREEN_HEIGHT)
+    self.Enemy = enemy.Enemy(SCREEN_WIDTH,SCREEN_HEIGHT)
 
   def run(self):
     while self.running:
@@ -43,7 +42,6 @@ class Game(pygame.sprite.Sprite):
     pygame.quit()
 
   def update(self):
-    self.Player.update()
     self.all.update()
 
     self.collision()
@@ -53,15 +51,14 @@ class Game(pygame.sprite.Sprite):
         self.running = False
 
   def collision(self):
-    test = pygame.sprite.spritecollide(self.Player,self.enemies,False)
+    player = pygame.sprite.groupcollide(self.player,self.enemies,True,True)
+    shot = pygame.sprite.groupcollide(self.enemies,self.shot,True,True)
 
-    if test:
+    if player or shot:
       self.running = False
 
   def draw(self,screen,bg):
     screen.blit(bg, (0, 0))
-    self.Enemy.draw(screen)
-    self.Player.draw(screen)
     self.all.draw(screen)
 
     pygame.display.update()

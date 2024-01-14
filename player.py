@@ -4,12 +4,12 @@ from pygame.locals import *
 import player_shot
 
 class Player(pygame.sprite.Sprite):
-  speed = 5
+  speed = 7
 
   def __init__(self,screen_width,screen_height):
-    pygame.sprite.Sprite.__init__(self)
-    self.player_img = pygame.image.load('images/player_img.png')
-    self.rect = self.player_img.get_rect()
+    pygame.sprite.Sprite.__init__(self,self.containers)
+    self.image = pygame.image.load('images/player_img.png')
+    self.rect = self.image.get_rect()
     self.rect.center = (screen_width//2, screen_height-80)
 
   def update(self):
