@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import *
+import enemy_shot
 
 class Enemy(pygame.sprite.Sprite):
   def __init__(self,screen_width,screen_height):
@@ -8,5 +8,5 @@ class Enemy(pygame.sprite.Sprite):
     self.rect = self.image.get_rect()
     self.rect.center = (screen_width//2, screen_height//6)
 
-  def draw(self,screen):
-    screen.blit(self.enemy_img,self.rect)
+  def update(self):
+    enemy_shot.Enemy_shot(self.rect.center)

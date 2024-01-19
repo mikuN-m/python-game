@@ -4,6 +4,7 @@ from pygame.locals import *
 import player
 import enemy
 import player_shot
+import enemy_shot
 import hp
 
 SCREEN_WIDTH = 725
@@ -21,13 +22,15 @@ class Game(pygame.sprite.Sprite):
     self.running = True
 
     self.all = pygame.sprite.RenderUpdates()
-    self.shot = pygame.sprite.Group()
+    self.player_shot = pygame.sprite.Group()
     self.player = pygame.sprite.Group()
     self.enemies = pygame.sprite.Group()
+    self.enemy_shot = pygame.sprite.Group()
 
     player.Player.containers = self.all, self.player
     enemy.Enemy.containers = self.all, self.enemies
-    player_shot.Player_shot.containers = self.all, self.shot
+    player_shot.Player_shot.containers = self.all, self.player_shot
+    enemy_shot.Enemy_shot.containers = self.all, self.enemy_shot
 
     self.Player = player.Player(SCREEN_WIDTH,SCREEN_HEIGHT)
     self.Enemy = enemy.Enemy(SCREEN_WIDTH,SCREEN_HEIGHT)
@@ -36,7 +39,7 @@ class Game(pygame.sprite.Sprite):
     while self.running:
       self.update()
       self.draw(self.screen,self.bg)
-      self.clock.tick(70)
+      self.clock.tick(60)
 
     pygame.quit()
 
@@ -50,15 +53,19 @@ class Game(pygame.sprite.Sprite):
 
   def collision(self):
     player = pygame.sprite.groupcollide(self.player,self.enemies,True,True)
-    shot = pygame.sprite.groupcollide(self.enemies,self.shot,False,False)
+    ene_shot = pygame.sprite.groupcollide(self.enemy_shot,self.player,False,False)
+    pl_shot = pygame.sprite.groupcollide(self.enemies,self.player_shot,False,False)
 
-    if shot:
+    if pl_shot:
       self.hp.hp -= 1
       self.hp.rect.inflate_ip(-1,0)
+      
+      if self.hp.hp == SCREEN_WIDTH // 4:
+        self.hp.hp_color = (200,55,0)
       if self.hp.hp == 0:
         self.running = False
 
-    if player:
+    if player or ene_shot:
       self.running = False
 
   def draw(self,screen,bg):

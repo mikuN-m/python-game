@@ -7,9 +7,5 @@ class Hp():
     self.hp_color = (0,255,0)
     self.rect = pygame.Rect(0,0,self.hp,30)
 
-  def update(self):
-    if self.hp == self.width // 2:
-      self.hp_color = (255,0,0)
-
   def draw(self,screen):
     pygame.draw.rect(screen,self.hp_color,self.rect)
