@@ -27,10 +27,7 @@ class Player(pygame.sprite.Sprite):
     if pressed_keys[K_RIGHT]:
       self.rect.move_ip(self.speed,0)
 
-    self.rect.clamp_ip(Rect(0,0,725,551))
+    self.rect.clamp_ip(Rect(0,30,725,551-30))
 
     if pressed_keys[K_SPACE]:
-      player_shot.Player_shot(self.rect.center)
-
-  def draw(self,screen):
-    screen.blit(self.player_img,self.rect)
+      player_shot.Player_shot(self.rect.x,self.rect.y)

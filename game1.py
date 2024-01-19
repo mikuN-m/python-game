@@ -4,12 +4,10 @@ from pygame.locals import *
 import player
 import enemy
 import player_shot
+import hp
 
 SCREEN_WIDTH = 725
 SCREEN_HEIGHT = 551
-
-player_pos = 0
-
 
 class Game(pygame.sprite.Sprite):
   def __init__(self):
@@ -18,6 +16,7 @@ class Game(pygame.sprite.Sprite):
     self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
     self.clock = pygame.time.Clock()
     self.bg = pygame.image.load('images/bg.jpg')
+    self.hp = hp.Hp(SCREEN_WIDTH)
     
     self.running = True
 
@@ -43,7 +42,6 @@ class Game(pygame.sprite.Sprite):
 
   def update(self):
     self.all.update()
-
     self.collision()
 
     for event in pygame.event.get():
@@ -52,14 +50,21 @@ class Game(pygame.sprite.Sprite):
 
   def collision(self):
     player = pygame.sprite.groupcollide(self.player,self.enemies,True,True)
-    shot = pygame.sprite.groupcollide(self.enemies,self.shot,True,True)
+    shot = pygame.sprite.groupcollide(self.enemies,self.shot,False,False)
 
-    if player or shot:
+    if shot:
+      self.hp.hp -= 1
+      self.hp.rect.inflate_ip(-1,0)
+      if self.hp.hp == 0:
+        self.running = False
+
+    if player:
       self.running = False
 
   def draw(self,screen,bg):
     screen.blit(bg, (0, 0))
     self.all.draw(screen)
+    self.hp.draw(screen)
 
     pygame.display.update()
 
