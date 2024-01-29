@@ -28,9 +28,10 @@ class Game(pygame.sprite.Sprite):
     self.enemy_shot = pygame.sprite.Group()
 
     player.Player.containers = self.all, self.player
-    enemy.Enemy.containers = self.all, self.enemies
     player_shot.Player_shot.containers = self.all, self.player_shot
-    enemy_shot.Enemy_shot.containers = self.all, self.enemy_shot
+    enemy.Enemy.containers = self.all, self.enemies
+    enemy_shot.shot1.containers = self.all, self.enemy_shot
+    enemy_shot.shot2.containers = self.all, self.enemy_shot
 
     self.Player = player.Player(SCREEN_WIDTH,SCREEN_HEIGHT)
     self.Enemy = enemy.Enemy(SCREEN_WIDTH,SCREEN_HEIGHT)

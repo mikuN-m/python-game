@@ -9,6 +9,6 @@ class Player_shot(pygame.sprite.Sprite):
     self.rect.center = (x+20,y-20)
 
   def update(self):
-    self.rect.move_ip(0,-30)
+    self.rect.move_ip(0,-50)
     if self.rect.top <= 0:
       self.kill()
